@@ -7,6 +7,8 @@ import io.swagger.client.model.*;
 
 import java.util.List;
 import java.util.Scanner;
+
+import static io.swagger.client.Services.InputService.userInputStr;
 import static io.swagger.client.Services.ValidationService.getValidBigDecimal;
 
 public class ClientMain {
@@ -20,33 +22,30 @@ public class ClientMain {
 
 		while (gameRunning) {
 			GameView.printMainMenu();
-			String choice = scanner.nextLine();
+			String choice = userInputStr("Eingabe: ");
 
 			switch (choice) {
 				case "1":
 					boolean gameMenuRunning = true;
 					while (gameMenuRunning) {
 						GameView.printGameMenu();
-						String gameChoice = scanner.nextLine();
+						String gameChoice = userInputStr("Eingabe: ");
 
 						switch (gameChoice){
 							case "1":
 								GameService.createLobby(defaultApi);
-
 								break;
 							case "2":
 								JoinGame joinGame = new JoinGame();
 
-								System.out.print("Game-ID eingeben: ");
-								String gameID = scanner.nextLine();
-								System.out.print("Robot-ID eingeben: ");
-								joinGame.setRobotId(scanner.nextLine());
+								String gameID = userInputStr("Game-ID eingeben:");
+								joinGame.setRobotId(userInputStr("Robot-ID eingeben: "));
 								defaultApi.apiGamesGameIdJoinPost(joinGame, gameID);
 								break;
 							case "3":
 								System.out.println("Spiel abfragen:");
 								System.out.print("Spiel-ID: ");
-								String gameId = scanner.nextLine();
+								String gameId = userInputStr("Eingabe: ");
 
 								Game game = defaultApi.apiGamesGameIdGet(gameId);
 								System.out.println("Gefundenes Spiel: " + game);
@@ -65,7 +64,7 @@ public class ClientMain {
 					boolean robotsMenuRunning = true;
 					while (robotsMenuRunning) {
 						GameView.printRobotMenu();
-						String robotChoice = scanner.nextLine();
+						String robotChoice = userInputStr("Eingabe: ");
 
 						switch (robotChoice) {
 							case "1":
