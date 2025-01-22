@@ -23,4 +23,5 @@ public class GameView {
 		System.out.println("2. Liste aller Roboter anzeigen");
 		System.out.println("3. Zurück zum Main Menü");
 	}
+
 }

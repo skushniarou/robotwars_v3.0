@@ -1,15 +1,18 @@
 package io.swagger.client;
 
 import io.swagger.client.Services.GameService;
+import io.swagger.client.Services.RobotService;
 import io.swagger.client.View.GameView;
+import io.swagger.client.View.OtherView;
 import io.swagger.client.api.DefaultApi;
 import io.swagger.client.model.*;
 
 import java.util.List;
-import java.util.Scanner;
 
+import static io.swagger.client.Services.GameService.getGameID;
+import static io.swagger.client.Services.GameService.joinLobby;
 import static io.swagger.client.Services.InputService.userInputStr;
-import static io.swagger.client.Services.ValidationService.getValidBigDecimal;
+import static io.swagger.client.View.OtherView.*;
 
 public class ClientMain {
 	public static void main(String[] args) throws ApiException {
@@ -17,7 +20,6 @@ public class ClientMain {
 		DefaultApi defaultApi = new DefaultApi();
 		List<Robot> robots = defaultApi.apiRobotsGet();
 
-		Scanner scanner = new Scanner(System.in);
 		boolean gameRunning = true;
 
 		while (gameRunning) {
@@ -32,30 +34,31 @@ public class ClientMain {
 						String gameChoice = userInputStr("Eingabe: ");
 
 						switch (gameChoice){
+							//Lobby erstellen
 							case "1":
-								GameService.createLobby(defaultApi);
+								try {
+									GameService.createLobby(defaultApi);
+									GameService.checkGameStatus(defaultApi);
+									GameService.joinLobby(defaultApi);
+								} catch (ApiException e) {
+									OtherView.printOneLineInfoException("Problem bei Lobby erstellen. Folgende Fehler ist aufgetreten:\n" + e.getResponseBody());
+								}
 								break;
+							//Lobby beitreten
 							case "2":
-								JoinGame joinGame = new JoinGame();
-
-								String gameID = userInputStr("Game-ID eingeben:");
-								joinGame.setRobotId(userInputStr("Robot-ID eingeben: "));
-								defaultApi.apiGamesGameIdJoinPost(joinGame, gameID);
+								joinLobby(defaultApi);
 								break;
+							//Bestimmtes Spiel abfragen
 							case "3":
-								System.out.println("Spiel abfragen:");
-								System.out.print("Spiel-ID: ");
-								String gameId = userInputStr("Eingabe: ");
-
-								Game game = defaultApi.apiGamesGameIdGet(gameId);
-								System.out.println("Gefundenes Spiel: " + game);
+								getGameID(defaultApi);
 								break;
+							//Zurück in Main-Menü
 							case "4":
-								System.out.println("Game Menü wird verlassen.");
+								printOneLineInfo("Game Menü wird verlassen.");
 								gameMenuRunning = false;
 								break;
 							default:
-								System.out.println("Ungültige Eingabe. Bitte wählen Sie 1, 2, 3 oder 4.");
+								displayInvalidInputBetweenTwoInt(1,4);
 								break;
 						}
 					}
@@ -68,27 +71,13 @@ public class ClientMain {
 
 						switch (robotChoice) {
 							case "1":
-								System.out.println("Roboter erstellen:");
-								try {
-									NewRobot newRobot = new NewRobot();
-									System.out.print("Name: ");
-									newRobot.setName(scanner.nextLine());
-									newRobot.setHealth(getValidBigDecimal(scanner, "health: "));
-									newRobot.setAttackDamage(getValidBigDecimal(scanner, "attackDamage: "));
-									newRobot.setAttackRange(getValidBigDecimal(scanner, "attackRange: "));
-									newRobot.setMovementRate(getValidBigDecimal(scanner, "movementRate: "));
-
-									defaultApi.apiRobotsRobotPost(newRobot);
-									System.out.println("Roboter erfolgreich erstellt");
-								} catch (ApiException e) {
-									System.err.println("Fehler beim Erstellen des Roboters: " + e.getResponseBody());
-								}
+								RobotService.createRobot(defaultApi);
 								break;
 
 							case "2":
-								System.out.println("Liste aller Roboter:");
+								printOneLineInfo("Liste aller Roboter:");
 								if (robots.isEmpty()) {
-									System.out.println("Keine Roboter gefunden.");
+									printOneLineInfo("Keine Roboter gefunden.");
 								} else {
 									for (Robot robot : robots) {
 										System.out.println(robot);
@@ -97,25 +86,23 @@ public class ClientMain {
 								break;
 
 							case "3":
-								System.out.println("Robot Menü wird verlassen.");
+								printOneLineInfo("Robot Menü wird verlassen.");
 								robotsMenuRunning = false;
 								break;
 
 							default:
-								System.err.println("Ungültige Eingabe. Bitte wählen Sie 1, 2 oder 3.");
+								displayInvalidInputBetweenTwoInt(1,3);
 								break;
 						}
 						System.out.println();
 					}
 				case "3":
-					System.out.println("Programm wird beendet. Auf Wiedersehen!");
+					printOneLineInfo("Programm wird beendet. Auf Wiedersehen in Robotwars!");
 					gameRunning = false;
 					break;
 
 				default:
-					System.err.println("Ungültige Eingabe. Bitte wählen Sie 1, 2 oder 3.");
-					scanner.close();
-
+					displayInvalidInputBetweenTwoInt(1,3);
 			}
 		}
 	}

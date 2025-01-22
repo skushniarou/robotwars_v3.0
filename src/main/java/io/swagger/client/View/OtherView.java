@@ -9,6 +9,10 @@ public class OtherView {
 		System.out.println("Diese Eingabe ist ungültig, geben Sie bitte neu ein!");
 	}
 
+	public static void displayInvalidInputSpecified(String text){
+		System.out.println("Diese" + text + "ist ungültig, geben Sie bitte neu ein!");
+	}
+
 	public static void displayInvalidInputChoice(){
 		System.out.println("Auswahl ist ungültig. Geben Sie bitte neu ein.");
 	}
@@ -19,5 +23,13 @@ public class OtherView {
 
 	public static void displayInvalidAttribute(String attribute){
 		System.out.println("Unbekanntes Attribut: " + attribute);
+	}
+
+	public static void printOneLineInfo(String text){
+		System.out.println(text);
+	}
+
+	public static void printOneLineInfoException(String e){
+		System.err.println(e);
 	}
 }
