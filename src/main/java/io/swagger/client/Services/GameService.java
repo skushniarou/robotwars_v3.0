@@ -21,14 +21,14 @@ public class GameService {
 		printOneLineInfo("Spiel-ID von dieser Lobby ist:" + newGameData.getId());
 	}
 
-	public static void joinLobby(DefaultApi defaultApi){
+	public static void joinLobby(DefaultApi defaultApi) throws ApiException {
 		JoinGame joinGame = new JoinGame();
 		String gameID = userInputStr("Game-ID eingeben:");
 		joinGame.setRobotId(userInputStr("Robot-ID eingeben: "));
 		defaultApi.apiGamesGameIdJoinPost(joinGame, gameID);
 	}
 
-	public static String getGameID(DefaultApi defaultApi) {
+	public static String getGameIDStatus(DefaultApi defaultApi) {
 		String gameId = userInputStr("Bitte Spiel-ID eingeben: ");
 		try {
 			Game game = defaultApi.apiGamesGameIdGet(gameId);
@@ -43,8 +43,9 @@ public class GameService {
 	public static void checkGameStatus(DefaultApi defaultApi) throws ApiException {
 		boolean gameStarted = false;
 		while (!gameStarted){
-			if(getGameID(defaultApi).equals(Game.StatusEnum.STARTED)){
+			if(getGameIDStatus(defaultApi).equals(Game.StatusEnum.STARTED)){
 				gameStarted = true;
+				printOneLineInfo("Spiel gestartet. Let Robot Wars begin!!!");
 			}
 			try {
 				Thread.sleep(10000);

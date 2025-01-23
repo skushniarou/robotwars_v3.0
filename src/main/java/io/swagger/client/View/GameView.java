@@ -14,14 +14,14 @@ public class GameView {
 		System.out.println("1. Spiel erstellen");
 		System.out.println("2. Spiel beitreten");
 		System.out.println("3. Bestimmtes Spiel abfragen");
-		System.out.println("4. Zurück zum Main Menü");
+		System.out.println("4. Zurück");
 	}
 
 	public static void printRobotMenu(){
 		System.out.println("Robots Menü:");
 		System.out.println("1. Roboter erstellen");
 		System.out.println("2. Liste aller Roboter anzeigen");
-		System.out.println("3. Zurück zum Main Menü");
+		System.out.println("3. Zurück");
 	}
 
 }
