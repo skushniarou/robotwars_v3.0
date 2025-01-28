@@ -7,7 +7,6 @@ import io.swagger.client.model.Game;
 import io.swagger.client.model.JoinGame;
 import io.swagger.client.model.NewGame;
 
-import static io.swagger.client.Services.InputService.userInputStr;
 import static io.swagger.client.View.OtherView.displayInvalidInputSpecified;
 import static io.swagger.client.View.OtherView.printOneLineInfo;
 
@@ -26,28 +25,26 @@ public class GameService {
 	public static void joinLobby(DefaultApi defaultApi, Battlefield battlefield) throws ApiException {
 		JoinGame joinGame = new JoinGame();
 		joinGame.setRobotId(battlefield.getRobotId());
-		defaultApi.apiGamesGameIdJoinPost(joinGame, battlefield.getRobotId());
+		defaultApi.apiGamesGameIdJoinPost(joinGame, battlefield.getGameId());
 	}
 
-	public static String getGameIDStatus(DefaultApi defaultApi) {
-		String gameId = userInputStr("Bitte Spiel-ID eingeben: ");
+	public static Enum<Game.StatusEnum> getGameIDStatus(DefaultApi defaultApi, Battlefield battlefield) {
 		try {
-			Game game = defaultApi.apiGamesGameIdGet(gameId);
-			printOneLineInfo("Gefundenes Spiel: " + game);
-			return game.getStatus().toString();
+			Game game = defaultApi.apiGamesGameIdGet(battlefield.getGameId());
+			printOneLineInfo("Es wird gewartet. Spielstatus: " + game);
+			return game.getStatus();
 		} catch (ApiException e) {
-			displayInvalidInputSpecified("Spiel-ID" + e.getResponseBody());
+			displayInvalidInputSpecified("Spiel-ID ungültig" + e.getResponseBody());
 			return null;
 		}
 	}
 
-	public static void checkGameStatus(DefaultApi defaultApi) throws ApiException {
+	public static void checkGameStatus(DefaultApi defaultApi, Battlefield battlefield) throws ApiException {
 		boolean gameStarted = false;
 		while (!gameStarted){
-			if(getGameIDStatus(defaultApi).equals(Game.StatusEnum.STARTED)){
+			if(getGameIDStatus(defaultApi,battlefield).equals(Game.StatusEnum.STARTED)){
 				gameStarted = true;
-				printOneLineInfo("Spiel gestartet. Let Robot Wars begin!!!");
-			}
+			} else{
 			try {
 				printOneLineInfo("z-z-Z");
 				Thread.sleep(10000);
@@ -55,5 +52,7 @@ public class GameService {
 				throw new RuntimeException(e);
 			}
 		}
+		printOneLineInfo("Spiel gestartet. Let Robot Wars begin!!!");
+	}
 	}
 }

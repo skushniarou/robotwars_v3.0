@@ -41,7 +41,7 @@ public class ClientMain {
 									GameService.createLobby(defaultApi,battlefield);
 									RobotService.robotMenu(defaultApi,battlefield);
 									GameService.joinLobby(defaultApi,battlefield);
-									GameService.checkGameStatus(defaultApi);
+									GameService.checkGameStatus(defaultApi,battlefield);
 									BattleService.battleMenu();
 								} catch (ApiException e) {
 									OtherView.printOneLineInfoException("Problem bei Lobby erstellen. Folgende Fehler ist aufgetreten:\n" + e.getResponseBody());
@@ -51,12 +51,12 @@ public class ClientMain {
 							case "2":
 								RobotService.robotMenu(defaultApi, battlefield);
 								GameService.joinLobby(defaultApi,battlefield);
-								GameService.checkGameStatus(defaultApi);
+								GameService.checkGameStatus(defaultApi, battlefield);
 								BattleService.battleMenu();
 								break;
 							//Bestimmtes Spiel abfragen
 							case "3":
-								getGameIDStatus(defaultApi);
+								getGameIDStatus(defaultApi, battlefield);
 								break;
 							//Zurück in Main-Menü
 							case "4":
