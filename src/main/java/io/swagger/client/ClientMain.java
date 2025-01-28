@@ -2,12 +2,13 @@ package io.swagger.client;
 
 import io.swagger.client.Services.BattleService;
 import io.swagger.client.Services.GameService;
+import io.swagger.client.Services.RobotService;
 import io.swagger.client.View.GameView;
 import io.swagger.client.View.OtherView;
 import io.swagger.client.api.DefaultApi;
+import io.swagger.client.model.Battlefield;
 
 import static io.swagger.client.Services.GameService.getGameIDStatus;
-import static io.swagger.client.Services.GameService.joinLobby;
 import static io.swagger.client.Services.InputService.userInputStr;
 import static io.swagger.client.Services.RobotService.robotMenu;
 import static io.swagger.client.View.OtherView.*;
@@ -16,6 +17,8 @@ public class ClientMain {
 	public static void main(String[] args) throws ApiException {
 
 		DefaultApi defaultApi = new DefaultApi();
+		Battlefield battlefield = new Battlefield("","");
+		String gameID = "";
 
 
 		boolean gameRunning = true;
@@ -35,9 +38,9 @@ public class ClientMain {
 							//Lobby erstellen
 							case "1":
 								try {
-									GameService.createLobby(defaultApi);
-									robotMenu(defaultApi);
-									GameService.joinLobby(defaultApi);
+									GameService.createLobby(defaultApi,battlefield);
+									RobotService.robotMenu(defaultApi,battlefield);
+									GameService.joinLobby(defaultApi,battlefield);
 									GameService.checkGameStatus(defaultApi);
 									BattleService.battleMenu();
 								} catch (ApiException e) {
@@ -46,8 +49,8 @@ public class ClientMain {
 								break;
 							//Lobby beitreten
 							case "2":
-								robotMenu(defaultApi);
-								joinLobby(defaultApi);
+								RobotService.robotMenu(defaultApi, battlefield);
+								GameService.joinLobby(defaultApi,battlefield);
 								GameService.checkGameStatus(defaultApi);
 								BattleService.battleMenu();
 								break;
@@ -67,7 +70,7 @@ public class ClientMain {
 					}
 					break;
 				case "2":
-					robotMenu(defaultApi);
+					robotMenu(defaultApi, battlefield);
 				case "3":
 					printOneLineInfo("Programm wird beendet. Auf Wiedersehen in Robot Wars!");
 					gameRunning = false;

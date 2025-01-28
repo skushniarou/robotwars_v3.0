@@ -2,6 +2,7 @@ package io.swagger.client.Services;
 
 import io.swagger.client.ApiException;
 import io.swagger.client.api.DefaultApi;
+import io.swagger.client.model.Battlefield;
 import io.swagger.client.model.Game;
 import io.swagger.client.model.JoinGame;
 import io.swagger.client.model.NewGame;
@@ -12,20 +13,20 @@ import static io.swagger.client.View.OtherView.printOneLineInfo;
 
 
 public class GameService {
-	public static void createLobby(DefaultApi defaultApi) throws ApiException {
+	public static void createLobby(DefaultApi defaultApi, Battlefield battlefield) throws ApiException {
 		NewGame newGame = new NewGame();
 		String mapId = "d2d0b803-955d-4367-8fdd-c8c3f94fecbb";
 		newGame.setMapId(mapId);
 		defaultApi.apiGamesGamePost(newGame);
 		Game newGameData = defaultApi.apiGamesGamePost(newGame);
-		printOneLineInfo("Spiel-ID von dieser Lobby ist:" + newGameData.getId());
+		battlefield.setGameId(newGameData.getId());
+		printOneLineInfo("Spiel-ID von dieser Lobby ist:" + battlefield.getGameId());
 	}
 
-	public static void joinLobby(DefaultApi defaultApi) throws ApiException {
+	public static void joinLobby(DefaultApi defaultApi, Battlefield battlefield) throws ApiException {
 		JoinGame joinGame = new JoinGame();
-		String gameID = userInputStr("Game-ID eingeben:");
-		joinGame.setRobotId(userInputStr("Robot-ID eingeben: "));
-		defaultApi.apiGamesGameIdJoinPost(joinGame, gameID);
+		joinGame.setRobotId(battlefield.getRobotId());
+		defaultApi.apiGamesGameIdJoinPost(joinGame, battlefield.getRobotId());
 	}
 
 	public static String getGameIDStatus(DefaultApi defaultApi) {
@@ -48,8 +49,8 @@ public class GameService {
 				printOneLineInfo("Spiel gestartet. Let Robot Wars begin!!!");
 			}
 			try {
-				Thread.sleep(10000);
 				printOneLineInfo("z-z-Z");
+				Thread.sleep(10000);
 			} catch (InterruptedException e) {
 				throw new RuntimeException(e);
 			}

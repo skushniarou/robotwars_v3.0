@@ -2,8 +2,8 @@ package io.swagger.client.Services;
 
 import io.swagger.client.ApiException;
 import io.swagger.client.View.GameView;
-import io.swagger.client.View.OtherView;
 import io.swagger.client.api.DefaultApi;
+import io.swagger.client.model.Battlefield;
 import io.swagger.client.model.NewRobot;
 import io.swagger.client.model.Robot;
 
@@ -15,7 +15,7 @@ import static io.swagger.client.Services.ValidationService.getValidBigDecimal;
 import static io.swagger.client.View.OtherView.*;
 
 public class RobotService {
-	public static void createRobot(DefaultApi defaultApi){
+	public static void createRobot(DefaultApi defaultApi,Battlefield battlefield){
 		Scanner scanner = new Scanner(System.in);
 		System.out.println("Roboter erstellen:");
 		try {
@@ -26,14 +26,15 @@ public class RobotService {
 			newRobot.setAttackRange(getValidBigDecimal(scanner, "attackRange: "));
 			newRobot.setMovementRate(getValidBigDecimal(scanner, "movementRate: "));
 
-			defaultApi.apiRobotsRobotPost(newRobot);
-			printOneLineInfo("Robot ist erfolgreich erstellt!");
+			Robot robot = defaultApi.apiRobotsRobotPost(newRobot);
+			battlefield.setRobotId(robot.getId());
+			printOneLineInfo("Robot ist erfolgreich erstellt! ID: " + battlefield.getRobotId());
 		} catch (ApiException e) {
 			printOneLineInfoException("Fehler beim Erstellen des Roboters: " + e.getResponseBody());
 		}
 	}
 
-	public static void chooseRobotFromList (DefaultApi defaultApi) throws ApiException {
+	public static void chooseRobotFromList (DefaultApi defaultApi, Battlefield battlefield) throws ApiException {
 		List<Robot> robots = defaultApi.apiRobotsGet();
 
 		printOneLineInfo("Liste aller Roboter:");
@@ -44,10 +45,10 @@ public class RobotService {
 				System.out.println(robot);
 			}
 		}
-
+		battlefield.setRobotId(userInputStr("Robot-ID kopieren und einfügen: "));
 	}
 
-	public static void robotMenu(DefaultApi defaultApi) throws ApiException {
+	public static void robotMenu(DefaultApi defaultApi, Battlefield battlefield) throws ApiException {
 		boolean robotsMenuRunning = true;
 		while (robotsMenuRunning) {
 			GameView.printRobotMenu();
@@ -55,11 +56,11 @@ public class RobotService {
 
 			switch (robotChoice) {
 				case "1":
-					createRobot(defaultApi);
+					createRobot(defaultApi,battlefield);
 					break;
 
 				case "2":
-					chooseRobotFromList(defaultApi);
+					chooseRobotFromList(defaultApi,battlefield);
 					break;
 
 				case "3":
