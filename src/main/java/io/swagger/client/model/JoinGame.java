@@ -25,7 +25,7 @@ import java.io.IOException;
  * JoinGame
  */
 
-@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2025-01-17T06:35:04.896175349Z[GMT]")
+@javax.annotation.Generated(value = "io.swagger.codegen.v3.generators.java.JavaClientCodegen", date = "2025-01-28T13:24:19.900928858Z[GMT]")
 
 public class JoinGame {
   @SerializedName("robotId")
