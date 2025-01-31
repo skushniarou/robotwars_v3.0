@@ -14,9 +14,9 @@ public class RobotServer {
 
     //Konstruktor für Beispiel Robotererstellung
     public RobotServer() {
-        robots.add(new Robot("1", "testRobot", 5, 5, 5, 5));
-        robots.add(new Robot("2", "testRobot2", 8, 3, 1, 2));
-        robots.add(new Robot("3", "testRobot3", 1, 5, 3, 4));
+        robots.add(new Robot("1", "Olaf", 1, 2, 3, 4));
+        robots.add(new Robot("2", "Anna", 2, 3, 4, 5));
+        robots.add(new Robot("3", "Günther", 1, 3, 5, 7));
     }
 
     List<Robot> robots = new ArrayList<Robot>();
@@ -38,7 +38,7 @@ public class RobotServer {
 
     //Testausgabe
     @GetMapping
-    public String hello() {
-        return "Hello";
+    public String test() {
+        return "test";
     }
 }
