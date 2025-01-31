@@ -47,6 +47,9 @@ public class Robot {
   @SerializedName("movementRate")
   private BigDecimal movementRate = null;
 
+  public Robot(String number, String testRobot, int i, int i1, int i2, int i3) {
+  }
+
   public Robot id(String id) {
     this.id = id;
     return this;

@@ -44,6 +44,9 @@ public class Game {
   @SerializedName("moves")
   private List<Move> moves = new ArrayList<Move>();
 
+  public Game(String number, String number1, ArrayList<PlayerRobot> playerRobots, ArrayList<Move> moves, StatusEnum statusEnum) {
+  }
+
   /**
    * STARTED, INITIAL, END
    */

@@ -43,7 +43,10 @@ public class NewMove {
   @SerializedName("align")
   private Align align = null;
 
-  public NewMove playerId(String playerId) {
+	public NewMove(String number, String number1, MovementType movementType, Align align, int i) {
+	}
+
+	public NewMove playerId(String playerId) {
     this.playerId = playerId;
     return this;
   }
